@@ -1,7 +1,10 @@
 package ba.unsa.etf.rpr.tutorijal7;
 
+import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -80,23 +83,25 @@ public class Tutorijal {
         }
         return listaGradova;
     }
-    static void zapisiXml(Drzava d) {
+    public static Drzava ucitajXml() {
+        Drzava d= null;
         try {
-            XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("drzave.xml"));
-            /*izlaz.setPersistenceDelegate(LocalDate.class,
-                new PersistenceDelegate() {
-                    @Override
-                    protected Expression instantiate(Object localDate, Encoder encdr) {
-                        return new Expression(localDate,
-                                LocalDate.class,
-                                "parse",
-                                new Object[]{localDate.toString()});
-                    }
-                });*/
-            izlaz.writeObject(f);
+            XMLDecoder ulaz = new XMLDecoder(new FileInputStream("drzave.xml"));
+            d= (Drzava) ulaz.readObject();
+            ulaz.close();
+        } catch(Exception e) {
+            System.out.println("Greska: "+e);
+        }
+        return d;
+    }
+
+    public static  void zapisiXml(Drzava d) {
+        try {
+            XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("un.xml"));
+            izlaz.writeObject(d);
             izlaz.close();
         } catch(Exception e) {
-            System.out.println("GreĹˇka: "+e);
+            System.out.println("Greska: "+e);
         }
     }
 
