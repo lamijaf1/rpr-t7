@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class UN implements Serializable {
     private ArrayList<Drzava> drzava;
     public UN(){
-        setDrzava(new ArrayList<Drzava>())
+        setDrzava(new ArrayList<Drzava>());
     }
     public UN(ArrayList<Drzava> drzava){
         this.setDrzava(drzava);
