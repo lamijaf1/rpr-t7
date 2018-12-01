@@ -1,27 +1,38 @@
 package ba.unsa.etf.rpr.tutorijal7;
 
+import java.beans.XMLEncoder;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Tutorijal {
-    public ArrayList<Double> Temperature(String temperature) {
+    public static ArrayList<Double> Temperature(String temperature) {
         ArrayList<Double> temp = new ArrayList<Double>();
-        int brojac = 0;
         for (int i = 0; i < temperature.length(); i++) {
             String vr = "";
-            while (temperature.charAt(i) != ',' && i < temperature.length()) {
+            if (temperature.charAt(i) == ',') i++;
+            while (temperature.charAt(i) != ',' && i != temperature.length()) {
                 vr += temperature.charAt(i);
                 i++;
             }
+
             double broj = Double.parseDouble(vr);
             temp.add(broj);
         }
+        int k=0;
+        for(k=temperature.length()-1;temperature.charAt(k)!=',';k--){}
+        String zadnji="";
+        while(k!=temperature.length()){
+            zadnji+=temperature.charAt(k);
+            k++;
+        }
+        double zadnjiBr=Double.parseDouble(zadnji);
+        temp.add(zadnjiBr);
         return temp;
     }
 
-    ArrayList<Grad> ucitajGradove() {
+    public static ArrayList<Grad> ucitajGradove() {
         Scanner ulaz = null;
         try {
             ulaz = new Scanner(new FileReader("mjerenje.txt"));
@@ -30,7 +41,7 @@ public class Tutorijal {
         }
         ArrayList<Grad> listaGradova=new ArrayList<>();
         String nazivGrada = "";
-        ArrayList<Double> temp;
+        ArrayList<Double> tr=new ArrayList<>();
         try {
             while (ulaz.hasNext()) {
                 String red = ulaz.nextLine();
@@ -39,26 +50,68 @@ public class Tutorijal {
                     nazivGrada += red.charAt(brojac);
                     brojac++;
                 }
-                String temperature = red.substring(brojac + 1, red.length());
-                temp = Temperature(temperature);
-                double niz[]=new double[temp.size()];
-                for(int i=0;i< temp.size();i++){
-                    niz[i]=temp.get(i);
+                String t = red.substring(brojac + 1);
+                for (int i = 0; i < t.length(); i++) {
+                    String vr = "";
+                    if (t.charAt(i) == ',') i++;
+                    while (t.charAt(i) != ',' && i != t.length()-1) {
+                        vr += t.charAt(i);
+                        i++;
+                    }
+                    if(i==t.length()-1)vr+=t.charAt(i);
+                    if(i==t.length())vr+=t.charAt(i);
+                    double broj = Double.parseDouble(vr);
+                    tr.add(broj);
+                }
+                double niz[]=new double[tr.size()];
+                for(int d=0;d< tr.size();d++){
+                    niz[d]=tr.get(d);
                 }
                 Grad noviGrad=new Grad();
                 noviGrad.setNaziv(nazivGrada);
                 noviGrad.setTemperature(niz);
+                noviGrad.setBrojStanovnika(0);
                 listaGradova.add(noviGrad);
                 nazivGrada="";
+                tr=new ArrayList<>();
             }
         } catch (Exception e) {
+            System.out.println("Desilo se");
         }
         return listaGradova;
     }
+    static void zapisiXml(Drzava d) {
+        try {
+            XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("drzave.xml"));
+            /*izlaz.setPersistenceDelegate(LocalDate.class,
+                new PersistenceDelegate() {
+                    @Override
+                    protected Expression instantiate(Object localDate, Encoder encdr) {
+                        return new Expression(localDate,
+                                LocalDate.class,
+                                "parse",
+                                new Object[]{localDate.toString()});
+                    }
+                });*/
+            izlaz.writeObject(f);
+            izlaz.close();
+        } catch(Exception e) {
+            System.out.println("GreĹˇka: "+e);
+        }
+    }
+
 
 
     public static void main(String[] args) {
-        // write your code here
+        ArrayList<Grad> gradovi=ucitajGradove();
+        for(int i=0;i<gradovi.size();i++){
+            System.out.print(gradovi.get(i).getNaziv()+" ");
+            double[] niz=gradovi.get(i).getTemperature();
+            for(int j=0;j<niz.length;j++){
+               if(j!=niz.length-1) System.out.print(niz[j]+",");
+               else System.out.println(niz[j]);
+            }
+        }
     }
 }
 
