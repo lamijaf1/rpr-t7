@@ -84,15 +84,16 @@ public class Tutorijal {
         }
         return listaGradova;
     }
-    public static Drzava ucitajXml() {
-        Drzava d= null;
+    public static UN ucitajXml(ArrayList<Grad> gradovi) {
+        UN d= null;
         try {
             XMLDecoder ulaz = new XMLDecoder(new FileInputStream("drzave.xml"));
-            d= (Drzava) ulaz.readObject();
+            d= (UN) ulaz.readObject();
             ulaz.close();
         } catch(Exception e) {
             System.out.println("Greska: "+e);
         }
+        ucitajGradove();
         return d;
     }
 
@@ -109,18 +110,20 @@ public class Tutorijal {
 
 
     public static void main(String[] args) {
-        ArrayList<Grad> gradovi=ucitajGradove();
-        for(int i=0;i<gradovi.size();i++){
-            System.out.print(gradovi.get(i).getNaziv()+" ");
-            double[] niz=gradovi.get(i).getTemperature();
-            for(int j=0;j<niz.length;j++){
-               if(j!=niz.length-1) System.out.print(niz[j]+",");
-               else System.out.println(niz[j]);
+        try{
+            ArrayList<Grad> gradovi=ucitajGradove();
+            for(int i=0;i<gradovi.size();i++){
+                System.out.print(gradovi.get(i).getNaziv()+" ");
+                double[] niz=gradovi.get(i).getTemperature();
+                for(int j=0;j<niz.length;j++){
+                    if(j!=niz.length-1) System.out.print(niz[j]+",");
+                    else System.out.println(niz[j]);
+                }
             }
         }
-
-
-
+        catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
 
