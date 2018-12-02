@@ -1,11 +1,12 @@
 package ba.unsa.etf.rpr.tutorijal7;
 
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -117,7 +118,11 @@ public class Tutorijal {
                else System.out.println(niz[j]);
             }
         }
+
+
+
     }
 }
+
 
 

@@ -12,11 +12,9 @@ public class UN implements Serializable {
         this.setDrzava(drzava);
     }
 
-
     public ArrayList<Drzava> getDrzava() {
         return drzava;
     }
-
     public void setDrzava(ArrayList<Drzava> drzava) {
         this.drzava = drzava;
     }
