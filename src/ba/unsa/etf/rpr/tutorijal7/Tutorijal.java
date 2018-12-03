@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Tutorijal {
-    public static ArrayList<Grad> ucitajGradove() {
+    public static ArrayList<Grad> ucitajGradove()throws FileNotFoundException{
         Scanner ulaz = null;
         try {
             ulaz = new Scanner(new FileReader("mjerenje.txt"));
@@ -27,6 +27,7 @@ public class Tutorijal {
                 String red = ulaz.nextLine();
                 String[] podaci = red.split(",");
                 nazivGrada= podaci[0];
+                if (!nazivGrada.matches("[a-z A-Z]+")) throw new IllegalArgumentException("Neispravno ime grada");
                 int brojac=nazivGrada.length();
                 String t = red.substring(brojac + 1);
                 for (int i = 0; i < t.length(); i++) {
@@ -38,6 +39,7 @@ public class Tutorijal {
                     }
                     if(i==t.length()-1)vr+=t.charAt(i);
                     if(i==t.length())vr+=t.charAt(i);
+                    if (vr.matches("[a-zA-Z]+")) throw new IllegalArgumentException("Pogresno unesene temperature!");
                     double broj = Double.parseDouble(vr);
                     tr.add(broj);
                 }
@@ -54,20 +56,20 @@ public class Tutorijal {
                 tr=new ArrayList<>();
             }
         } catch (Exception e) {
-            System.out.println("Desilo se");
+           // System.out.println("Desilo se");
         }
         return listaGradova;
     }
-    public static UN ucitajXml(ArrayList<Grad> gradovi) {
+    public static UN ucitajXml(ArrayList<Grad> gradovi)  {
         UN d= null;
         try {
             XMLDecoder ulaz = new XMLDecoder(new FileInputStream("drzave.xml"));
             d= (UN) ulaz.readObject();
             ulaz.close();
+            ucitajGradove();
         } catch(Exception e) {
             System.out.println("Greska: "+e);
         }
-        ucitajGradove();
         return d;
     }
 
