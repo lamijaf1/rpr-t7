@@ -1,7 +1,9 @@
 package ba.unsa.etf.rpr.tutorijal7;
 
-import javax.swing.text.Document;
-import javax.swing.text.Element;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.beans.XMLDecoder;
@@ -60,17 +62,43 @@ public class Tutorijal {
         }
         return listaGradova;
     }
+    public static void ucitajElemente(Element element, UN drzave) {
+        System.out.print("Element "+element.getTagName()+", ");
+
+        int brAtributa = element.getAttributes().getLength();
+        System.out.print(brAtributa+" atributa");
+
+        NodeList djeca = element.getChildNodes();
+
+        // Ako nema djece ispisujemo sadrĹľaj
+        if (djeca.getLength() == 1) {
+            String sadrzaj = element.getTextContent();
+            System.out.println(", sadrzaj: '" + sadrzaj + "'");
+        } else {
+            System.out.println("");
+        }
+
+        for(int i = 0; i < djeca.getLength(); i++) {
+            Node dijete = djeca.item(i);
+            if (dijete instanceof Element) {
+                ucitajElemente((Element)dijete,drzave);
+            }
+        }
+
+    }
+
     public static UN ucitajXml(ArrayList<Grad> gradovi)  {
-        UN d= null;
+        UN drzave = new UN();
+        Document doc=null;
         try {
-            XMLDecoder ulaz = new XMLDecoder(new FileInputStream("drzave.xml"));
-            d= (UN) ulaz.readObject();
-            ulaz.close();
-            ucitajGradove();
+            DocumentBuilder docReader = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            doc = docReader.parse(new File("drzave.xml"));
         } catch(Exception e) {
             System.out.println("Greska: "+e);
         }
-        return d;
+        Element korijen = doc.getDocumentElement();
+        ucitajElemente(korijen, drzave);
+        return drzave;
     }
 
     public static  void zapisiXml(Drzava d) {
@@ -93,6 +121,8 @@ public class Tutorijal {
                     else System.out.println(niz[j]);
                 }
             }
+            ucitajXml(gradovi);
+
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
