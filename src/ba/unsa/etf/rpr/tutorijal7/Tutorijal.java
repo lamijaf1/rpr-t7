@@ -176,7 +176,8 @@ public class Tutorijal {
             ucitajXml(gradovi);
             d=new Drzava("Bosna i Hercegovina",32434,3234234);
             zapisiXml(d);
-            d1=new Drzava()
+            Drzava d1=new Drzava("Njemacka", 22223211, 121245465);
+            zapisiXml(d1);
 
 
         }
