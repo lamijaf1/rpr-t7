@@ -127,7 +127,6 @@ public class Tutorijal {
                                     Element element2=(Element)djecaGrada;
                                     if(element2.getTagName()=="naziv")noviGrad.setNaziv(element2.getTextContent());
                                     //getElementsByTagName(tagName) - vraća elemente unutar ovog čiji se tag zove kao parametar
-                                    double[] niz=noviGrad.getTemperature();
                                     noviGrad.setTemperature(new double[0]);
                                     for(int c=0;c<gradovi.size();c++){
                                         if(noviGrad.getNaziv()==gradovi.get(c).getNaziv()) noviGrad.setTemperature(gradovi.get(c).getTemperature());
@@ -142,7 +141,6 @@ public class Tutorijal {
                             double br=Double.parseDouble(s2);
                             d1.setPovrsina(br);
                         }
-
                     }
                 }
                 spisak.add(d1);
