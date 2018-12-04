@@ -64,7 +64,6 @@ public class Tutorijal {
     }
     public static void ucitajElemente(Element element, UN drzave) {
         System.out.print("Element "+element.getTagName()+", ");
-
         int brAtributa = element.getAttributes().getLength();
         System.out.print(brAtributa+" atributa");
 
@@ -98,6 +97,23 @@ public class Tutorijal {
         }
         Element korijen = doc.getDocumentElement();
         ucitajElemente(korijen, drzave);
+
+        NodeList drzave =doc.getDocumentElement().getChildNodes();
+        ArrayList<Drzava> spisakDrzava = new ArrayList<>();
+        for(int i=0;i<drzave.getLength();i++){
+            Node d=drzave.item();
+            Drzava d1=new Drzava();
+            if(d instanceof  Element){
+                Element element=(Element)d;
+                String s=element.getAttributes("stanovnika");
+                int brSt=Integer.parseInt(s);
+                d1.setBrojStanovnika(brSt);
+                //getChildNodes() - vraća sve elemente koji su unutar ovog elementa
+                NodeList nodelist=element.getChildNodes();
+
+
+            }
+        }
         return drzave;
     }
 
@@ -111,6 +127,7 @@ public class Tutorijal {
         }
     }
     public static void main(String[] args) {
+        Drzava d=null;
         try{
             ArrayList<Grad> gradovi=ucitajGradove();
             for(int i=0;i<gradovi.size();i++){
@@ -122,6 +139,9 @@ public class Tutorijal {
                 }
             }
             ucitajXml(gradovi);
+            d=new Drzava("Bosna ii Hercegovina",32434,3234234);
+            zapisiXml(d);
+
 
         }
         catch (Exception e) {

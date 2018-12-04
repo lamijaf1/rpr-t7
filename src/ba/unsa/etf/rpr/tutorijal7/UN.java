@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UN implements Serializable {
-    private ArrayList<Drzava> drzava;
+    private ArrayList<Drzava> drzave;
     public UN(){
         setDrzava(new ArrayList<Drzava>());
     }
@@ -13,9 +13,13 @@ public class UN implements Serializable {
     }
 
     public ArrayList<Drzava> getDrzava() {
-        return drzava;
+        return drzave;
     }
     public void setDrzava(ArrayList<Drzava> drzava) {
-        this.drzava = drzava;
+        this.drzave = drzava;
     }
+    public void dodajDrzavu(Drzava d) {
+        drzave.add(d);
+    }
+
 }
