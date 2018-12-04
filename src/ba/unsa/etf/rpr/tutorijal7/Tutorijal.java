@@ -95,25 +95,60 @@ public class Tutorijal {
         } catch(Exception e) {
             System.out.println("Greska: "+e);
         }
-        Element korijen = doc.getDocumentElement();
-        ucitajElemente(korijen, drzave);
-
-        NodeList drzave =doc.getDocumentElement().getChildNodes();
-        ArrayList<Drzava> spisakDrzava = new ArrayList<>();
-        for(int i=0;i<drzave.getLength();i++){
-            Node d=drzave.item();
+         Element korijen = doc.getDocumentElement();
+         ucitajElemente(korijen, drzave);
+        NodeList drzaveNode =doc.getDocumentElement().getChildNodes();
+        ArrayList<Drzava> spisak = new ArrayList<>();
+        for(int i=0;i<drzaveNode.getLength();i++){
+            Node d=drzaveNode.item(i);
             Drzava d1=new Drzava();
             if(d instanceof  Element){
                 Element element=(Element)d;
-                String s=element.getAttributes("stanovnika");
+               // getAttribute(attrName) - vraća vrijednost atributa čiji je naziv attrName ili prazan string ako ne postoji
+                String s=element.getAttribute("brojStanovnika");
                 int brSt=Integer.parseInt(s);
                 d1.setBrojStanovnika(brSt);
                 //getChildNodes() - vraća sve elemente koji su unutar ovog elementa
                 NodeList nodelist=element.getChildNodes();
+                for(int j=0;j<nodelist.getLength();j++){
+                    Node djeca=nodelist.item(j);
+                    if(djeca instanceof  Element){
+                        Element element1=(Element)djeca;
+                        if(element1.getTagName()=="naziv") d1.setNaziv(element1.getTextContent());
+                        if(element1.getTagName()=="glavniGrad"){
+                            Grad noviGrad=new Grad();
+                            String s1=element1.getAttribute("brojStanovnika");
+                            int brojSt=Integer.parseInt(s1);
+                            noviGrad.setBrojStanovnika(brojSt);
+                            NodeList nodelist1=element1.getChildNodes();
+                            for(int k=0;k<nodelist1.getLength();k++){
+                                Node djecaGrada=nodelist1.item(k);
+                                if(djecaGrada instanceof  Element){
+                                    Element element2=(Element)djecaGrada;
+                                    if(element2.getTagName()=="naziv")noviGrad.setNaziv(element2.getTextContent());
+                                    //getElementsByTagName(tagName) - vraća elemente unutar ovog čiji se tag zove kao parametar
+                                    double[] niz=noviGrad.getTemperature();
+                                    noviGrad.setTemperature(new double[0]);
+                                    for(int c=0;c<gradovi.size();c++){
+                                        if(noviGrad.getNaziv()==gradovi.get(c).getNaziv()) noviGrad.setTemperature(gradovi.get(c).getTemperature());
+                                    }
+                                    d1.setGlavniGrad(noviGrad);
+                                }
 
+                            }
+                        }
+                        if(element1.getTagName()=="povrsina") {
+                            String s2=element1.getAttribute("jedinica");
+                            double br=Double.parseDouble(s2);
+                            d1.setPovrsina(br);
+                        }
 
+                    }
+                }
+                spisak.add(d1);
             }
         }
+        drzave.setDrzava(spisak);
         return drzave;
     }
 
@@ -139,8 +174,9 @@ public class Tutorijal {
                 }
             }
             ucitajXml(gradovi);
-            d=new Drzava("Bosna ii Hercegovina",32434,3234234);
+            d=new Drzava("Bosna i Hercegovina",32434,3234234);
             zapisiXml(d);
+            d1=new Drzava()
 
 
         }
